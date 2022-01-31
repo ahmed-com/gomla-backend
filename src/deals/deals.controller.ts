@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { DealsService } from './deals.service';
 import { CreateDealDto } from './dto/create-deal.dto';
-import {Deal} from './deal.model';
+import {Deal} from './deal.entity';
 import { SearchDealsFilterDto } from './dto/search-deals-filter.dto';
 
 @Controller('deals')
@@ -18,10 +18,10 @@ export class DealsController {
     return this.dealsService.getDeal();
   }
 
-  @Post()
-  createDeal(@Body() createDealDto: CreateDealDto):Deal {
-    return this.dealsService.createDeal(createDealDto);
-  }
+  // @Post()
+  // createDeal(@Body() createDealDto: CreateDealDto):Deal {
+  //   return this.dealsService.createDeal(createDealDto);
+  // }
 
   @Patch('/:id')
   editDeal() {

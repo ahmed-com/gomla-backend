@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Deal } from './deal.model';
+import { Deal } from './deal.entity';
 import { CreateDealDto } from './dto/create-deal.dto';
 
 @Injectable()
