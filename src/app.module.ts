@@ -4,6 +4,7 @@ import { DealsModule } from './deals/deals.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validationSchema } from './config.schema';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { validationSchema } from './config.schema';
     }),
     DealsModule,
     AuthModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
