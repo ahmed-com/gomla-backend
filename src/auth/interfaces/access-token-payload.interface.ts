@@ -1,3 +1,4 @@
 export interface AccessTokenPayload{
-    id: number;
+    sub: number;
+    iat: number;
 }

@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AccessTokenPayload } from './interfaces/access-token-payload.interface';
+import { privateKey } from 'src/utils/getKeys';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
       email,
     );
 
-    const accessToken = await this.issueAccessToken({ id: user.id });
+    const accessToken = await this.issueAccessToken(user);
     return { accessToken };
   }
 
@@ -44,15 +45,18 @@ export class AuthService {
     // check for old password
 
     if (user && isVerified) {
-      const accessToken = await this.issueAccessToken({ id: user.id });
+      const accessToken = await this.issueAccessToken(user);
       return { accessToken };
     } else {
       throw new UnauthorizedException();
     }
   }
 
-  private async issueAccessToken(payload: AccessTokenPayload): Promise<string> {
-    const accessToken = await this.jwtService.signAsync(payload);
+  private async issueAccessToken(user: User): Promise<string> {
+    const sub = user.id;
+    const iat = Date.now();
+    const payload: AccessTokenPayload = {sub, iat};
+    const accessToken = await this.jwtService.signAsync(payload,{privateKey});
     return accessToken;
   }
 }
