@@ -1,5 +1,6 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { FetchUser } from 'src/decorators/fetch-user.decorator';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -14,6 +15,7 @@ export class AuthController {
   }
 
   @Post('/login')
+  @FetchUser()
   login(@Body() loginDto: LoginDto): Promise<{accessToken: string}>{
     return this.authService.login(loginDto);
   }

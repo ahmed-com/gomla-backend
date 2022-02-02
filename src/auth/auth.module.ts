@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import {publicKey, privateKey} from '../utils/getKeys'
+import { FetchUserInterceptor } from './interceptors/fetch-user.interceptor';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import {publicKey, privateKey} from '../utils/getKeys'
       },
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, FetchUserInterceptor],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule],
 })
