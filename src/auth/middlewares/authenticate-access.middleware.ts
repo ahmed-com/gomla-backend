@@ -9,10 +9,21 @@ export class AuthenticateAccessMiddleware implements NestMiddleware{
     ){}
 
     async use(req: Request, res: Response, next: NextFunction) {
-        // if a bearer token were found in the request authorization header 
-        // extract then validate using the authService
-        // attach the userId to the request 
-        
+        const authHeader = req.get('Authorization');
+        if(!authHeader){
+            next();
+            return;
+        }
+
+        const accessToken = authHeader.split(' ')[1];
+        if(!accessToken){
+            next();
+            return;
+        }
+
+        const payload = await this.autheService.verifyAccessToken(accessToken);
+        req.userId = payload.sub;
+
         next();
     }
 }
