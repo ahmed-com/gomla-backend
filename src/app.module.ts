@@ -4,13 +4,11 @@ import { DealsModule } from './deals/deals.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validationSchema } from './config/config.schema';
-import config from './config/config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [config],
       envFilePath: [`${process.env.STAGE}.env`],
       ignoreEnvFile: !!process.env.IGNORE_ENV_FILES,
       validationSchema

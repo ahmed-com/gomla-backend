@@ -1,5 +1,0 @@
-export default () => ({
-  REFRESH_TOKEN_SECURE: false,
-  REFRESH_TOKEN_EXPIRATION: 31536000000,
-  ACCESS_TOKEN_EXPIRATION: '1h',
-});
