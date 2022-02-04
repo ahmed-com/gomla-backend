@@ -8,4 +8,6 @@ export const validationSchema = joi.object({
     DB_USERNAME: joi.string().required(),
     DB_PASSWORD: joi.string().required(),
     DB_NAME: joi.string().required(),
+    REFRESH_TOKEN_SECURE: joi.boolean().required(),
+    REFRESH_TOKEN_EXPIRATION: joi.number().required(),
 })

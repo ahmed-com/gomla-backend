@@ -4,10 +4,11 @@ import { RegisterDto } from './dto/requests/register.dto';
 import { UsersRepository } from './users.repository';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
-import { LoginDto } from './dto/requests/signin.dto';
+import { SigninDto } from './dto/requests/signin.dto';
 import { AccessTokenPayload } from './interfaces/access-token-payload.interface';
 import { privateKey } from 'src/utils/getKeys';
 import { ResetPasswordDto } from './dto/requests/reset-password.dto';
+import { LoginDto} from './dto/responses/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +19,7 @@ export class AuthService {
 
   async registerUser(
     registerDto: RegisterDto,
-  ): Promise<{ accessToken: string, refreshToken: string }> {
+  ): Promise<{ loginDto: LoginDto, refreshToken: string }> {
     // const { username, password, email } = registerDto;
 
     // const salt = await bcrypt.genSalt();
@@ -34,8 +35,8 @@ export class AuthService {
     return { accessToken: '', refreshToken: '' };
   }
 
-  async login(loginDto: LoginDto): Promise<{ accessToken: string, refreshToken: '' }> {
-    // const { username, password } = loginDto;
+  async signin(signinDto: SigninDto): Promise<{ loginDto: LoginDto, refreshToken: string }> {
+    // const { username, password } = signinDto;
 
     // const user = await this.usersRepository.findOne({ username });
 
@@ -72,7 +73,7 @@ export class AuthService {
     return this.usersRepository.findOne(id);
   }
 
-  async resetPassword(dto: ResetPasswordDto, user: User): Promise<string>{
+  async resetPassword(dto: ResetPasswordDto, user: User): Promise<{loginDto: LoginDto, refreshToken: string}>{
     return '';
   }
 

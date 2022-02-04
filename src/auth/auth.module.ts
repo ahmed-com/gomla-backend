@@ -9,6 +9,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { publicKey, privateKey } from '../utils/getKeys';
 import { FetchUserInterceptor } from './interceptors/fetch-user.interceptor';
 import { AuthenticateAccessMiddleware } from './middlewares/authenticate-access.middleware';
+import { ConfigModule } from '@nestjs/config';
 
 declare global{
   namespace Express{
@@ -21,6 +22,7 @@ declare global{
 
 @Module({
   imports: [
+    ConfigModule,
     TypeOrmModule.forFeature([UsersRepository]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
