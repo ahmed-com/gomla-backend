@@ -68,6 +68,10 @@ export class AuthService {
     return { sub: 0, iat: 0 };
   }
 
+  async fetchUser(id): Promise<User>{
+    return this.usersRepository.findOne(id);
+  }
+
   async resetPassword(dto: ResetPasswordDto, user: User): Promise<string>{
     return '';
   }

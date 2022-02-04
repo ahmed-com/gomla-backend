@@ -5,5 +5,5 @@ export const GetUser = createParamDecorator(function (
   _data: never,
   ctx: ExecutionContext,
 ): User {
-  return ctx.switchToHttp().getRequest().user;
+  return ctx.switchToHttp().getRequest().currentUser;
 });
