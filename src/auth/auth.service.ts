@@ -1,13 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RegisterDto } from './dto/register.dto';
+import { RegisterDto } from './dto/requests/register.dto';
 import { UsersRepository } from './users.repository';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
-import { LoginDto } from './dto/login.dto';
+import { LoginDto } from './dto/requests/signin.dto';
 import { AccessTokenPayload } from './interfaces/access-token-payload.interface';
 import { privateKey } from 'src/utils/getKeys';
-import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ResetPasswordDto } from './dto/requests/reset-password.dto';
 
 @Injectable()
 export class AuthService {

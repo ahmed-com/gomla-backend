@@ -6,7 +6,7 @@ import {
     Matches,
   } from 'class-validator';
   
-  export class LoginDto {
+  export class SigninDto {
     @IsString()
     @MinLength(2)
     @MaxLength(20)

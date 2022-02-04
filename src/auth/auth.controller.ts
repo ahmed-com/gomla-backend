@@ -1,9 +1,8 @@
-import { Body, Controller, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Post } from '@nestjs/common';
 import { FetchUser } from 'src/decorators/fetch-user.decorator';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { SigninDto } from './dto/requests/signin.dto';
+import { RegisterDto } from './dto/requests/register.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -14,15 +13,9 @@ export class AuthController {
     return this.authService.registerUser(registerDto);
   }
 
-  @Post('/login')
+  @Post('/signin')
   @FetchUser()
-  login(@Body() loginDto: LoginDto): Promise<{accessToken: string}>{
+  login(@Body() loginDto: SigninDto): Promise<{accessToken: string}>{
     return this.authService.login(loginDto);
-  }
-
-  @Post('/test')
-  // @UseGuards(AuthGuard())
-  test(@Req() req){
-    console.log(req);
   }
 }
