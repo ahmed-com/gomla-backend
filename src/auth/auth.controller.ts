@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SigninDto } from './dto/requests/signin.dto';
 import { RegisterDto } from './dto/requests/register.dto';
@@ -28,7 +28,7 @@ export class AuthController {
       registerDto,
     );
     const expireDate =
-      Date.now() + this.configService.get('REFRESH_TOKEN_EXPIRATION');
+      new Date(Date.now() + this.configService.get('REFRESH_TOKEN_EXPIRATION'));
     res.cookie('refresh-token', refreshToken, {
       httpOnly: true,
       sameSite: true,
@@ -46,7 +46,7 @@ export class AuthController {
   ): Promise<LoginDto> {
     const { loginDto, refreshToken } = await this.authService.signin(signinDto);
     const expireDate =
-      Date.now() + this.configService.get('REFRESH_TOKEN_EXPIRATION');
+      new Date(Date.now() + this.configService.get('REFRESH_TOKEN_EXPIRATION'));
     res.cookie('refresh-token', refreshToken, {
       httpOnly: true,
       sameSite: true,
@@ -69,7 +69,7 @@ export class AuthController {
       user,
     );
     const expireDate =
-      Date.now() + this.configService.get('REFRESH_TOKEN_EXPIRATION');
+      new Date(Date.now() + this.configService.get('REFRESH_TOKEN_EXPIRATION'));
     res.cookie('refresh-token', refreshToken, {
       httpOnly: true,
       sameSite: true,
@@ -77,5 +77,15 @@ export class AuthController {
       expires: expireDate,
     });
     return loginDto;
+  }
+
+  @Get('/logout')
+  async logout(@Res({ passthrough: true }) res: Response,){
+    res.cookie('refresh-token', '', {
+      httpOnly: true,
+      sameSite: true,
+      secure: this.configService.get('REFRESH_TOKEN_SECURE'),
+      expires: new Date(0),
+    });
   }
 }
