@@ -1,6 +1,6 @@
 import { BadRequestException, createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export const GetUser = createParamDecorator(function (
+export const RefreshToken = createParamDecorator(function (
   _data: never,
   ctx: ExecutionContext,
 ): string {

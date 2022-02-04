@@ -6,9 +6,10 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { SigninDto } from './dto/requests/signin.dto';
 import { AccessTokenPayload } from './interfaces/access-token-payload.interface';
-import { privateKey } from 'src/utils/getKeys';
+import getKeys from 'src/utils/getKeys';
 import { ResetPasswordDto } from './dto/requests/reset-password.dto';
 import { LoginDto} from './dto/responses/login.dto';
+import { sign, verify } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -61,7 +62,7 @@ export class AuthService {
     return '';
   }
 
-  async refreshAccessToken(refreshToken: string): Promise<string> {
+  async refreshAccessToken(refreshToken: string): Promise<LoginDto> {
     return '';
   }
 

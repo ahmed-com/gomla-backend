@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SigninDto } from './dto/requests/signin.dto';
 import { RegisterDto } from './dto/requests/register.dto';
@@ -10,6 +10,7 @@ import { GetUser } from 'src/decorators/get-user.decorator';
 import { User } from './user.entity';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { RefreshToken } from './decorators/refresh-token.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -87,5 +88,10 @@ export class AuthController {
       secure: this.configService.get('REFRESH_TOKEN_SECURE'),
       expires: new Date(0),
     });
+  }
+
+  @Put('/refresh-token')
+  async refreshAccessToken(@RefreshToken() token: string): Promise<LoginDto>{
+    return this.authService.refreshAccessToken(token)
   }
 }
