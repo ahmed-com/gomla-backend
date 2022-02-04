@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersRepository } from './users.repository';
 import { FetchUserInterceptor } from './interceptors/fetch-user.interceptor';
 import { AuthenticateAccessMiddleware } from './middlewares/authenticate-access.middleware';
-import { ConfigModule } from '@nestjs/config';
 
 declare global{
   namespace Express{
@@ -18,7 +17,6 @@ declare global{
 
 @Module({
   imports: [
-    ConfigModule,
     TypeOrmModule.forFeature([UsersRepository]),
   ],
   providers: [

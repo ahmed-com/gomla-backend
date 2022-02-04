@@ -10,4 +10,6 @@ export const validationSchema = joi.object({
     DB_NAME: joi.string().required(),
     REFRESH_TOKEN_SECURE: joi.boolean().required(),
     REFRESH_TOKEN_EXPIRATION: joi.number().required(),
+    ACCESS_TOKEN_EXPIRATION: joi.string().required(),
+    PASSWORD_ALERT_PERIOD:joi.number().default(1000 * 60 * 60 * 24 * 7),
 })

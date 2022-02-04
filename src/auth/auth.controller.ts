@@ -81,7 +81,7 @@ export class AuthController {
   }
 
   @Get('/logout')
-  async logout(@Res({ passthrough: true }) res: Response,){
+  async logout(@Res({ passthrough: true }) res: Response,):Promise<void>{
     res.cookie('refresh-token', '', {
       httpOnly: true,
       sameSite: true,
@@ -90,7 +90,14 @@ export class AuthController {
     });
   }
 
+  @Post('/logout-global')
+  @FetchUser()
+  async logoutGlobally(@GetUser() user: User):Promise<void>{
+    return this.authService.logoutGlobally(user);
+  }
+
   @Put('/refresh-token')
+  @Serialize(LoginDto)
   async refreshAccessToken(@RefreshToken() token: string): Promise<LoginDto>{
     return this.authService.refreshAccessToken(token)
   }
