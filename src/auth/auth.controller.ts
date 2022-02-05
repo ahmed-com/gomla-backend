@@ -36,6 +36,12 @@ export class AuthController {
       secure: this.configService.get('REFRESH_TOKEN_SECURE'),
       expires: expireDate,
     });
+    res.cookie('is-auth', true, {
+      httpOnly: false,
+      sameSite: true,
+      secure: this.configService.get('REFRESH_TOKEN_SECURE'),
+      expires: expireDate,
+    });
     return loginDto;
   }
 
@@ -50,6 +56,12 @@ export class AuthController {
       new Date(Date.now() + this.configService.get('REFRESH_TOKEN_EXPIRATION'));
     res.cookie('refresh-token', refreshToken, {
       httpOnly: true,
+      sameSite: true,
+      secure: this.configService.get('REFRESH_TOKEN_SECURE'),
+      expires: expireDate,
+    });
+    res.cookie('is-auth', true, {
+      httpOnly: false,
       sameSite: true,
       secure: this.configService.get('REFRESH_TOKEN_SECURE'),
       expires: expireDate,
@@ -77,6 +89,12 @@ export class AuthController {
       secure: this.configService.get('REFRESH_TOKEN_SECURE'),
       expires: expireDate,
     });
+    res.cookie('is-auth', true, {
+      httpOnly: false,
+      sameSite: true,
+      secure: this.configService.get('REFRESH_TOKEN_SECURE'),
+      expires: expireDate,
+    });
     return loginDto;
   }
 
@@ -84,6 +102,12 @@ export class AuthController {
   async logout(@Res({ passthrough: true }) res: Response,):Promise<void>{
     res.cookie('refresh-token', '', {
       httpOnly: true,
+      sameSite: true,
+      secure: this.configService.get('REFRESH_TOKEN_SECURE'),
+      expires: new Date(0),
+    });
+    res.cookie('is-auth', false, {
+      httpOnly: false,
       sameSite: true,
       secure: this.configService.get('REFRESH_TOKEN_SECURE'),
       expires: new Date(0),
