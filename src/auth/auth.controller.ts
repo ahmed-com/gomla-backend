@@ -57,7 +57,7 @@ export class AuthController {
     return loginDto;
   }
 
-  @Post('/resest-password')
+  @Post('/reset-password')
   @FetchUser()
   @Serialize(LoginDto)
   async resetPassword(
@@ -96,7 +96,7 @@ export class AuthController {
     return this.authService.logoutGlobally(user);
   }
 
-  @Put('/refresh-token')
+  @Get('/refresh-token')
   @Serialize(LoginDto)
   async refreshAccessToken(@RefreshToken() token: string): Promise<LoginDto>{
     return this.authService.refreshAccessToken(token)

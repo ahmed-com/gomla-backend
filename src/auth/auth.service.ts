@@ -11,7 +11,7 @@ import { ResetPasswordDto } from './dto/requests/reset-password.dto';
 import { LoginDto} from './dto/responses/login.dto';
 import { sign, verify } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import ms from 'ms';
+import * as ms from 'ms';
 
 @Injectable()
 export class AuthService {
@@ -89,7 +89,6 @@ export class AuthService {
     },getKeys().privateKey, {
       algorithm: "RS256",
       expiresIn: this.configService.get("ACCESS_TOKEN_EXPIRATION"),
-      subject: `${user.id}`,
     });
   }
 
@@ -100,7 +99,6 @@ export class AuthService {
     },getKeys().privateKey, {
       algorithm: "RS256",
       expiresIn: ms(this.configService.get("REFRESH_TOKEN_EXPIRATION")),
-      subject: `${user.id}`,
     });
   }
 
