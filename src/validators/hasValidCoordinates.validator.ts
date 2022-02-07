@@ -5,10 +5,10 @@ import {
 } from 'class-validator';
 import { Point } from 'geojson';
 
-export function IsValidCoordinates(validationOptions?: ValidationOptions) {
+export function HasValidCoordinates(validationOptions?: ValidationOptions) {
   return (object: any, propertyName: string) => {
     registerDecorator({
-      name: 'IsValidCoordinates',
+      name: 'HasValidCoordinates',
       target: object.constructor,
       propertyName,
       constraints: [],
