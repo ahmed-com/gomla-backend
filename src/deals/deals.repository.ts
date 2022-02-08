@@ -5,20 +5,34 @@ import * as wkx from 'wkx';
 import { InternalServerErrorException } from '@nestjs/common';
 @EntityRepository(Deal)
 export class DealsRepository extends Repository<Deal> {
-  async searchDeals(term: string, location?: Point): Promise<Deal[]>{
+  async searchDeals(
+    term?: string,
+    location?: Point /** ,buyingDate spec, pagination, otherFilters */,
+  ): Promise<Deal[]> {
     const query = this.createQueryBuilder('deal');
-    query.where(`(${this.titleContainsTerm} OR ${this.descriptionContainsTerm})`, {title: term, description: term});
+    
+    query.where('deal.buyingDate > :now', {
+      now: new Date(Date.now()).toUTCString(),
+    });
 
-    if(location){
-        const wkt_location = wkx.Point.parseGeoJSON(location).toWkt();
-        query.andWhere(this.nearbyLocation, {location: wkt_location});
+    if (term) {
+      query.andWhere(
+        `(${this.titleContainsTerm} OR ${this.descriptionContainsTerm})`,
+        { title: term, description: term },
+      );
     }
 
-    try{
-        const deals = await query.getMany()
-        return deals;
-    }catch(err){
-        throw new InternalServerErrorException();
+    if (location) {
+      const wkt_location = wkx.Point.parseGeoJSON(location).toWkt();
+      query.andWhere(this.nearbyLocation(), { location: wkt_location });
+      // query.orderBy(this.distanceToLocation()) // orderby doesn't work with prepared statements
+    }
+
+    try {
+      const deals = await query.getMany();
+      return deals;
+    } catch (err) {
+      throw new InternalServerErrorException();
     }
   }
 

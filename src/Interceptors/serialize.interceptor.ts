@@ -11,19 +11,24 @@ import { ClassType } from 'src/types/class-type.interface';
 
 @Injectable()
 export class SerializeInterceptor implements NestInterceptor {
-
-  constructor(
-    private dto: ClassType
-  ){}
+  constructor(private dto: ClassType) {}
 
   intercept(
     context: ExecutionContext,
     handler: CallHandler<any>,
   ): Observable<any> {
-    return handler.handle().pipe(map((data) => {
-      return plainToClass(this.dto,data,{
-        excludeExtraneousValues: true,
-      })
-    }));
+    return handler.handle().pipe(
+      map((data) => {
+        if (Array.isArray(data)) {
+          return data.map((el) =>
+            plainToClass(this.dto, el, { excludeExtraneousValues: true }),
+          );
+        }
+
+        return plainToClass(this.dto, data, {
+          excludeExtraneousValues: true,
+        });
+      }),
+    );
   }
 }

@@ -1,31 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Point } from 'geojson';
+import { User } from 'src/auth/user.entity';
 import { Deal } from './deal.entity';
 import { DealsRepository } from './deals.repository';
-import { CreateDealDto } from './dto/create-deal.dto';
+import { CreateDealDto } from './dto/requests/create-deal.dto';
 
 @Injectable()
 export class DealsService {
-    constructor(
-        @InjectRepository(DealsRepository)
-        private dealsRepository: DealsRepository
-    ){}
+  constructor(
+    @InjectRepository(DealsRepository)
+    private dealsRepository: DealsRepository,
+  ) {}
 
-    async searchDeals():Promise<Deal[]>{
-        return [new Deal()]
-    }
+  async searchDeals(
+    term?: string,
+    location?: Point /** ,buyingDate spec, pagination, otherFilters */,
+  ): Promise<Deal[]> {
+    if (!term && !location) return this.getDefaultDeals();
+    return this.dealsRepository.searchDeals(term, location);
+  }
 
-    async getDefaultDeals():Promise<Deal[]>{
-        return [new Deal()]
-    }
+  private async getDefaultDeals(): Promise<Deal[]> {
+    return [];
+  }
 
-    async getDeal(){}
+  async getDeal() {}
 
-    async createDeal(createDealDto: CreateDealDto):Promise<Deal>{
-        return new Deal()
-    }
+  async createDeal(createDealDto: CreateDealDto & {imgs: string[]}, user: User): Promise<Deal> {
+    
+    return 
+  }
 
-    async editDeal(){}
+  async editDeal() {}
 
-    async deleteDeal(){}
+  async deleteDeal() {}
 }

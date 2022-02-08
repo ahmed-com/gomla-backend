@@ -37,7 +37,7 @@ export class Deal {
   location: Point;
 
   @Column()
-  notifNum: number;
+  membersCount: number;
 
   @CreateDateColumn()
   createDate: Date;

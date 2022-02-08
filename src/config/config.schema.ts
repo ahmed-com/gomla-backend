@@ -12,4 +12,5 @@ export const validationSchema = joi.object({
     REFRESH_TOKEN_EXPIRATION: joi.number().required(),
     ACCESS_TOKEN_EXPIRATION: joi.string().required(),
     PASSWORD_ALERT_PERIOD:joi.number().default(1000 * 60 * 60 * 24 * 7),
+    SERVER_HOST: joi.string().required(),
 })

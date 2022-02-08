@@ -41,3 +41,9 @@ lerna-debug.log*
 # KEYS
 
 *.pem
+
+# Image Uploads
+
+/images/*.jpeg
+/images/*.png
+/images/*.jpg
