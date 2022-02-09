@@ -3,6 +3,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Deal } from './deal.entity';
 import * as wkx from 'wkx';
 import { InternalServerErrorException } from '@nestjs/common';
+import { getMysqlDate } from 'src/utils/getMysqlDate';
 @EntityRepository(Deal)
 export class DealsRepository extends Repository<Deal> {
   async searchDeals(
@@ -12,18 +13,18 @@ export class DealsRepository extends Repository<Deal> {
     const query = this.createQueryBuilder('deal');
     
     query.where('deal.buyingDate > :now', {
-      now: new Date(Date.now()).toUTCString(),
+      now: getMysqlDate(Date.now()),
     });
 
     if (term) {
       query.andWhere(
-        `(${this.titleContainsTerm} OR ${this.descriptionContainsTerm})`,
+        `(${this.titleContainsTerm()} OR ${this.descriptionContainsTerm()})`,
         { title: term, description: term },
       );
     }
 
     if (location) {
-      const wkt_location = wkx.Point.parseGeoJSON(location).toWkt();
+      const wkt_location = wkx.Geometry.parseGeoJSON(location).toWkt();
       query.andWhere(this.nearbyLocation(), { location: wkt_location });
       // query.orderBy(this.distanceToLocation()) // orderby doesn't work with prepared statements
     }
@@ -32,6 +33,7 @@ export class DealsRepository extends Repository<Deal> {
       const deals = await query.getMany();
       return deals;
     } catch (err) {
+      console.log(err)
       throw new InternalServerErrorException();
     }
   }
@@ -45,10 +47,10 @@ export class DealsRepository extends Repository<Deal> {
   }
 
   private nearbyLocation(): string {
-    return `${this.distanceToLocation} <= 10000`; // TO-DO: aquire form config
+    return `${this.distanceToLocation()} <= 10000`; // TO-DO: aquire form config
   }
 
   private distanceToLocation(): string {
-    return 'ST_DISTANCE_SPHERE( deal.location , ST_GEOMFROM_TEXT(:location))';
+    return 'ST_DISTANCE_SPHERE( deal.location , ST_GeomFromText(:location,4326))';
   }
 }

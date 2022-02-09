@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { ArrayTransformer } from './transformers/array.transformer';
 import { GeoJsonTransformer } from './transformers/geoJson.transformer';
@@ -54,6 +55,9 @@ export class Deal {
   @Column('json', { transformer: new ArrayTransformer() })
   imgs: string[];
 
-  @ManyToOne(() => User, (user) => user.deals)
+  @Column()
+  ownerId: number;
+  @ManyToOne(() => User, user => user.deals)
+  @JoinColumn({ name: "ownerId" })
   owner: User;
 }

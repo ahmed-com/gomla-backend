@@ -34,6 +34,7 @@ import { removeFiles } from 'src/utils/removeFiles';
 import { allowedMimetypes } from 'src/config/imageExtensions';
 import { Serialize } from 'src/decorators/serialize.decorator';
 import { CreateDealResponseDto } from './dto/reponses/create-deal-response.dto';
+import { GetUserId } from 'src/decorators/get-userId.decorator';
 
 const imagesDir = `${process.cwd()}/images`;
 @Controller('deals')
@@ -61,8 +62,8 @@ export class DealsController {
   }
 
   @Get('/:id')
-  getDeal(@Param('id') id: number) {
-    return this.dealsService.getDeal();
+  getDeal(@Param('id') id: string): Promise<Deal> {
+    return this.dealsService.getDeal(parseInt(id));
   }
 
   @Post()
@@ -112,12 +113,14 @@ export class DealsController {
   }
 
   @Patch('/:id')
-  editDeal() {
-    return this.dealsService.editDeal();
+  @UseGuards(AuthGuard)
+  updateDeal(@Param('id') id: string, @GetUserId() userId: string, @Body() editableDealFieldsDto) {
+    return this.dealsService.updateDeal(parseInt(id),parseInt(userId),editableDealFieldsDto);
   }
 
   @Delete('/:id')
-  deleteDeal() {
-    return this.dealsService.deleteDeal();
+  @UseGuards(AuthGuard)
+  deleteDeal(@Param('id') id: string, @GetUserId() userId: string): Promise<void> {
+    return this.dealsService.deleteDeal(parseInt(id), parseInt(userId));
   }
 }
