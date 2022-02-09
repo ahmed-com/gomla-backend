@@ -9,13 +9,16 @@ class UserPublicInfo {
     username: string;
 }
 
-export default class SearchDealsResponseDto{
+export default class GetDealResponseDto{
 
     @Expose()
     id: number;
 
     @Expose()
     title: string;
+
+    @Expose()
+    description: string;
 
     @Expose()
     expected_vendor: string;

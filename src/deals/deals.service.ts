@@ -26,7 +26,7 @@ export class DealsService {
   }
 
   async getDeal(id: number): Promise<Deal> {
-    const deal = await this.dealsRepository.findOne(id);
+    const deal = await this.dealsRepository.findOne(id, {relations: ['owner']});
     if (!deal) throw new NotFoundException();
     return deal;
   }

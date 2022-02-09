@@ -35,6 +35,8 @@ import { allowedMimetypes } from 'src/config/imageExtensions';
 import { Serialize } from 'src/decorators/serialize.decorator';
 import { CreateDealResponseDto } from './dto/reponses/create-deal-response.dto';
 import { GetUserId } from 'src/decorators/get-userId.decorator';
+import SearchDealsResponseDto from './dto/reponses/search-deals-response.dto';
+import GetDealResponseDto from './dto/reponses/get-deal-response.dto';
 
 const imagesDir = `${process.cwd()}/images`;
 @Controller('deals')
@@ -45,6 +47,7 @@ export class DealsController {
   ) {}
 
   @Get()
+  @Serialize(SearchDealsResponseDto)
   getDeals(@Query() searchDealsDto: SearchDealsDto): Promise<Deal[]> {
     const { term, lat, lng } = searchDealsDto;
     let location: Point;
@@ -62,6 +65,7 @@ export class DealsController {
   }
 
   @Get('/:id')
+  @Serialize(GetDealResponseDto)
   getDeal(@Param('id') id: string): Promise<Deal> {
     return this.dealsService.getDeal(parseInt(id));
   }
@@ -114,6 +118,7 @@ export class DealsController {
 
   @Patch('/:id')
   @UseGuards(AuthGuard)
+  @Serialize(GetDealResponseDto)
   updateDeal(@Param('id') id: string, @GetUserId() userId: string, @Body() editableDealFieldsDto) {
     return this.dealsService.updateDeal(parseInt(id),parseInt(userId),editableDealFieldsDto);
   }

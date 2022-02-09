@@ -4,13 +4,14 @@ import { Deal } from './deal.entity';
 import * as wkx from 'wkx';
 import { InternalServerErrorException } from '@nestjs/common';
 import { getMysqlDate } from 'src/utils/getMysqlDate';
+import { User } from 'src/auth/user.entity';
 @EntityRepository(Deal)
 export class DealsRepository extends Repository<Deal> {
   async searchDeals(
     term?: string,
     location?: Point /** ,buyingDate spec, pagination, otherFilters */,
   ): Promise<Deal[]> {
-    const query = this.createQueryBuilder('deal');
+    const query = this.createQueryBuilder('deal').leftJoinAndSelect('deal.owner','owner')
     
     query.where('deal.buyingDate > :now', {
       now: getMysqlDate(Date.now()),
