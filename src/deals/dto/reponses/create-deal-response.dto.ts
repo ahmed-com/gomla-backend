@@ -18,6 +18,7 @@ export class CreateDealResponseDto{
     @Expose()
     notifNum: number;
 
+    @Expose()
     @Type(()=> UserPublicInfo)
     owner: UserPublicInfo
 }

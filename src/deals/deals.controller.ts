@@ -32,6 +32,8 @@ import { extname } from 'path';
 import { verifyExtension } from 'src/utils/verifyExtension';
 import { removeFiles } from 'src/utils/removeFiles';
 import { allowedMimetypes } from 'src/config/imageExtensions';
+import { Serialize } from 'src/decorators/serialize.decorator';
+import { CreateDealResponseDto } from './dto/reponses/create-deal-response.dto';
 
 const imagesDir = `${process.cwd()}/images`;
 @Controller('deals')
@@ -82,6 +84,7 @@ export class DealsController {
       },
     }),
   )
+  @Serialize(CreateDealResponseDto)
   async createDeal(
     @Body() createDealDto: CreateDealDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
