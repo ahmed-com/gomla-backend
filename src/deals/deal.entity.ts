@@ -1,5 +1,13 @@
 import { Point } from 'geojson';
-import { Column, Entity, Index, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { User } from 'src/auth/user.entity';
+import {
+  Column,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
+} from 'typeorm';
 import { ArrayTransformer } from './transformers/array.transformer';
 import { GeoJsonTransformer } from './transformers/geoJson.transformer';
 
@@ -9,11 +17,11 @@ export class Deal {
   id: number;
 
   @Column()
-  @Index({fulltext: true})
+  @Index({ fulltext: true })
   title: string;
 
   @Column()
-  @Index({fulltext: true})
+  @Index({ fulltext: true })
   description: string;
 
   @Column()
@@ -22,17 +30,18 @@ export class Deal {
   @Column()
   currency: string;
 
-  @Column("date")
+  @Column('date')
   buyingDate: Date;
 
   @Column()
   expected_vendor: string;
 
-  @Column('geometry', {
-    spatialFeatureType: 'Point',
-    srid: 4326,
-    transformer: new GeoJsonTransformer(),
-  })
+  // @Column('geometry', {
+  //   spatialFeatureType: 'Point',
+  //   srid: 4326,
+  //   transformer: new GeoJsonTransformer(),
+  // })
+  @Column({ type: 'point', srid: 4326, transformer: new GeoJsonTransformer() })
   @Index({ spatial: true })
   location: Point;
 
@@ -42,6 +51,9 @@ export class Deal {
   @CreateDateColumn()
   createDate: Date;
 
-  @Column("json",{transformer: new ArrayTransformer()})
+  @Column('json', { transformer: new ArrayTransformer() })
   imgs: string[];
+
+  @ManyToOne(() => User, (user) => user.deals)
+  owner: User;
 }

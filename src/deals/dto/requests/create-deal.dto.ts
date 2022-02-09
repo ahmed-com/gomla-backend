@@ -2,6 +2,8 @@ import { Type } from 'class-transformer';
 import {
   IsDate,
   IsIn,
+  IsLatitude,
+  IsLongitude,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -13,10 +15,8 @@ import {
   MinDate,
   MinLength,
 } from 'class-validator';
-import { HasValidCoordinates } from 'src/validators/hasValidCoordinates.validator';
 import { IsLettersAndNumbers } from 'src/validators/isLettersAndNumbers.validator';
 import { IsValidCharacters } from 'src/validators/isValidCharacters.validator';
-import { GeoJsonPoint } from '../geoJson-point.type';
 import currenciesObj from 'src/config/currencies';
 const currencies = Object.keys(currenciesObj);
 
@@ -37,18 +37,18 @@ export class CreateDealDto {
   @IsValidCharacters()
   description: string;
 
-  @IsNumber()
-  @Min(10)
-  @Max(1000000)
-  expected_price: number;
+  // @IsNumber()
+  // @Min(10)
+  // @Max(1000000)
+  // expected_price: number;
 
   @IsIn(currencies)
   currency: string;
 
-  @IsDate()
-  @MinDate(new Date(Date.now()))
-  @MaxDate(new Date(Date.now() + maxDate))
-  buyingDate: Date;
+  // @IsDate({message: 'not valid date'})
+  // @MinDate(new Date(Date.now()), {message: 'this date already passed'})
+  // @MaxDate(new Date(Date.now() + maxDate), {message: 'date too far'})
+  // buyingDate: Date;
 
   @IsNotEmpty()
   @IsString()
@@ -60,7 +60,11 @@ export class CreateDealDto {
   // @IsUrl({},{each: true})
   // imgs: string[];
 
-  @HasValidCoordinates()
-  @Type(() => GeoJsonPoint)
-  location: GeoJsonPoint;
+  @IsNotEmpty()
+  @IsLatitude()
+  lat: number;
+
+  @IsNotEmpty()
+  @IsLongitude()
+  lng: number;
 }

@@ -1,9 +1,11 @@
+import { Deal } from 'src/deals/deal.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -39,4 +41,7 @@ export class User {
 
   @CreateDateColumn()
   createDate: Date;
+
+  @OneToMany(()=> Deal, (deal)=> deal.owner)
+  deals: Deal[];
 }

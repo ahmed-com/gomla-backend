@@ -30,9 +30,10 @@ import { stat, unlink } from 'fs';
 import { Response } from 'express';
 import { extname } from 'path';
 import { verifyExtension } from 'src/utils/verifyExtension';
+import { removeFiles } from 'src/utils/removeFiles';
+import { allowedMimetypes } from 'src/config/imageExtensions';
 
 const imagesDir = `${process.cwd()}/images`;
-
 @Controller('deals')
 export class DealsController {
   constructor(
@@ -74,11 +75,7 @@ export class DealsController {
       }),
 
       fileFilter: (_req, file, cb) => {
-        if (
-          file.mimetype === 'image/png' ||
-          file.mimetype === 'image/jpg' ||
-          file.mimetype === 'image/jpeg'
-        ) {
+        if (allowedMimetypes.includes(file.mimetype)) {
           return cb(null, true);
         }
         return cb(null, false);
@@ -96,14 +93,17 @@ export class DealsController {
         return `${this.configService.get('SERVER_HOST')}/deals/images/${
           file.filename
         }`;
-      unlink(file.path, () => {});
-      throw new BadRequestException();
+      removeFiles(files);
+      throw new BadRequestException('files don\'t match the extension');
     });
+
     const imgs = await Promise.all(verifiedFiles);
+    const location: Point = {
+      type: "Point",
+      coordinates: [createDealDto.lng, createDealDto.lat]
+    }
 
-    const dto = { ...createDealDto, imgs };
-
-    console.log(dto.imgs);
+    const dto = { ...createDealDto, imgs, location };
 
     return this.dealsService.createDeal(dto, user);
   }

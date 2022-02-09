@@ -1,4 +1,12 @@
-import { Expose } from "class-transformer";
+import { Expose, Type } from "class-transformer";
+
+class UserPublicInfo {
+    @Expose()
+    id: number;
+
+    @Expose()
+    username: string;
+}
 
 export class CreateDealResponseDto{
     @Expose()
@@ -9,4 +17,7 @@ export class CreateDealResponseDto{
 
     @Expose()
     notifNum: number;
+
+    @Type(()=> UserPublicInfo)
+    owner: UserPublicInfo
 }

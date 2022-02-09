@@ -1,8 +1,7 @@
 import { fromFile } from "file-type";
-import { extname } from "path";
+import { allowedImageExtensions } from "src/config/imageExtensions";
 
 export async function verifyExtension(filePath: string) {
-    const fileExt = extname(filePath);
     const realExt = (await fromFile(filePath)).ext;
-    return fileExt === realExt;
+    return allowedImageExtensions.includes(realExt);
 }

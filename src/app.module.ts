@@ -26,6 +26,8 @@ import { validationSchema } from './config/config.schema';
           database: configService.get('DB_NAME'),
           autoLoadEntities: true,
           synchronize: true,
+          legacySpatialSupport: false,
+          logging: configService.get('DB_LOGGING')
         };
       },
     }),

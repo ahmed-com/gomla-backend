@@ -27,9 +27,10 @@ export class DealsService {
 
   async getDeal() {}
 
-  async createDeal(createDealDto: CreateDealDto & {imgs: string[]}, user: User): Promise<Deal> {
-    
-    return 
+  async createDeal(createDealDto: CreateDealDto & {imgs: string[], location: Point}, user: User): Promise<Deal> {
+    const deal = this.dealsRepository.create(createDealDto);
+    deal.owner = user;
+    return this.dealsRepository.save(deal);
   }
 
   async editDeal() {}
