@@ -21,6 +21,10 @@ export class DealsService {
     return this.dealsRepository.searchDeals(term, location);
   }
 
+  async getDealsByUser(userId: number): Promise<Deal[]>{
+    return this.dealsRepository.find({ownerId: userId});
+  }
+
   private async getDefaultDeals(): Promise<Deal[]> {
     return [];
   }
